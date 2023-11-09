@@ -1,5 +1,3 @@
-/node_modules
-
 # remove the following ignores for your project
 /config/pimcore/constants.php
 
