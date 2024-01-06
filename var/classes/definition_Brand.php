@@ -34,7 +34,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => 'Brand',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1704382824,
+   'modificationDate' => 1704449901,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -259,7 +259,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                     array (
                     ),
                      'defaultValue' => NULL,
-                     'columnLength' => 120,
+                     'columnLength' => 90,
                      'regex' => '',
                      'regexFlags' => 
                     array (

@@ -4,7 +4,7 @@
  * Fields Summary:
  * - localizedfields [localizedfields]
  * -- dictionaryKey [input]
- * -- dictionaryValue [wysiwyg]
+ * -- dictionaryValue [textarea]
  */
 
 return Pimcore\Model\DataObject\Fieldcollection\Definition::__set_state(array(
@@ -94,7 +94,7 @@ return Pimcore\Model\DataObject\Fieldcollection\Definition::__set_state(array(
                  'defaultValueGenerator' => '',
               )),
               1 => 
-              Pimcore\Model\DataObject\ClassDefinition\Data\Wysiwyg::__set_state(array(
+              Pimcore\Model\DataObject\ClassDefinition\Data\Textarea::__set_state(array(
                  'name' => 'dictionaryValue',
                  'title' => 'Dictionary Value',
                  'tooltip' => '',
@@ -112,9 +112,9 @@ return Pimcore\Model\DataObject\Fieldcollection\Definition::__set_state(array(
                  'blockedVarsForExport' => 
                 array (
                 ),
-                 'toolbarConfig' => '',
+                 'maxLength' => NULL,
+                 'showCharCount' => true,
                  'excludeFromSearchIndex' => false,
-                 'maxCharacters' => '',
                  'height' => '',
                  'width' => '',
               )),

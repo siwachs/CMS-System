@@ -13,10 +13,14 @@
  * -- shortDescription [textarea]
  * -- description [textarea]
  * - brand [manyToManyObjectRelation]
+ * - category [manyToManyObjectRelation]
+ * - subCategory [manyToManyObjectRelation]
  * - articleNumber [input]
- * - psds [fieldcollections]
+ * - title [input]
+ * - itemList [fieldcollections]
+ * - psds [objectbricks]
  * - specifications [fieldcollections]
- * - downloads [fieldcollections]
+ * - downloads [manyToManyRelation]
  * - warrantyStatement [fieldcollections]
  */
 
@@ -27,7 +31,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => 'Product',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1704381357,
+   'modificationDate' => 1704510877,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -378,6 +382,86 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                  'height' => '',
               )),
               2 => 
+              Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation::__set_state(array(
+                 'name' => 'category',
+                 'title' => 'Category',
+                 'tooltip' => '',
+                 'mandatory' => true,
+                 'noteditable' => false,
+                 'index' => false,
+                 'locked' => false,
+                 'style' => '',
+                 'permissions' => NULL,
+                 'fieldtype' => '',
+                 'relationType' => true,
+                 'invisible' => false,
+                 'visibleGridView' => false,
+                 'visibleSearch' => false,
+                 'blockedVarsForExport' => 
+                array (
+                ),
+                 'classes' => 
+                array (
+                  0 => 
+                  array (
+                    'classes' => 'Category',
+                  ),
+                ),
+                 'displayMode' => 'grid',
+                 'pathFormatterClass' => '',
+                 'maxItems' => 1,
+                 'visibleFields' => 'name,image',
+                 'allowToCreateNewObject' => false,
+                 'allowToClearRelation' => true,
+                 'optimizedAdminLoading' => false,
+                 'enableTextSelection' => false,
+                 'visibleFieldDefinitions' => 
+                array (
+                ),
+                 'width' => '',
+                 'height' => '',
+              )),
+              3 => 
+              Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation::__set_state(array(
+                 'name' => 'subCategory',
+                 'title' => 'Sub Category',
+                 'tooltip' => '',
+                 'mandatory' => true,
+                 'noteditable' => false,
+                 'index' => false,
+                 'locked' => false,
+                 'style' => '',
+                 'permissions' => NULL,
+                 'fieldtype' => '',
+                 'relationType' => true,
+                 'invisible' => false,
+                 'visibleGridView' => false,
+                 'visibleSearch' => false,
+                 'blockedVarsForExport' => 
+                array (
+                ),
+                 'classes' => 
+                array (
+                  0 => 
+                  array (
+                    'classes' => 'Category',
+                  ),
+                ),
+                 'displayMode' => 'grid',
+                 'pathFormatterClass' => '',
+                 'maxItems' => 1,
+                 'visibleFields' => 'name,image',
+                 'allowToCreateNewObject' => false,
+                 'allowToClearRelation' => true,
+                 'optimizedAdminLoading' => false,
+                 'enableTextSelection' => false,
+                 'visibleFieldDefinitions' => 
+                array (
+                ),
+                 'width' => '',
+                 'height' => '',
+              )),
+              4 => 
               Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
                  'name' => 'articleNumber',
                  'title' => 'Article No.',
@@ -407,7 +491,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                  'width' => '',
                  'defaultValueGenerator' => '',
               )),
-              3 => 
+              5 => 
               Pimcore\Model\DataObject\ClassDefinition\Data\Localizedfields::__set_state(array(
                  'name' => 'localizedfields',
                  'title' => '',
@@ -484,10 +568,10 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
           )),
           1 => 
           Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
-             'name' => 'Product Safety Data Sheet',
+             'name' => 'Whats in the box',
              'type' => NULL,
              'region' => NULL,
-             'title' => 'Product Safety Data Sheet',
+             'title' => 'Whats in the box',
              'width' => '',
              'height' => '',
              'collapsible' => false,
@@ -497,9 +581,39 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'children' => 
             array (
               0 => 
+              Pimcore\Model\DataObject\ClassDefinition\Data\Input::__set_state(array(
+                 'name' => 'title',
+                 'title' => 'Title',
+                 'tooltip' => '',
+                 'mandatory' => true,
+                 'noteditable' => false,
+                 'index' => false,
+                 'locked' => false,
+                 'style' => '',
+                 'permissions' => NULL,
+                 'fieldtype' => '',
+                 'relationType' => false,
+                 'invisible' => false,
+                 'visibleGridView' => false,
+                 'visibleSearch' => false,
+                 'blockedVarsForExport' => 
+                array (
+                ),
+                 'defaultValue' => NULL,
+                 'columnLength' => 190,
+                 'regex' => '',
+                 'regexFlags' => 
+                array (
+                ),
+                 'unique' => false,
+                 'showCharCount' => true,
+                 'width' => '',
+                 'defaultValueGenerator' => '',
+              )),
+              1 => 
               Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections::__set_state(array(
-                 'name' => 'psds',
-                 'title' => 'PSDS',
+                 'name' => 'itemList',
+                 'title' => 'Item List',
                  'tooltip' => '',
                  'mandatory' => false,
                  'noteditable' => false,
@@ -517,7 +631,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                 ),
                  'allowedTypes' => 
                 array (
-                  0 => 'dictionary',
+                  0 => 'inputList',
                 ),
                  'lazyLoading' => true,
                  'maxItems' => NULL,
@@ -540,6 +654,58 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'labelAlign' => 'left',
           )),
           2 => 
+          Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
+             'name' => 'Product Safety Data Sheet',
+             'type' => NULL,
+             'region' => NULL,
+             'title' => 'Product Safety Data Sheet',
+             'width' => '',
+             'height' => '',
+             'collapsible' => false,
+             'collapsed' => false,
+             'bodyStyle' => '',
+             'datatype' => 'layout',
+             'children' => 
+            array (
+              0 => 
+              Pimcore\Model\DataObject\ClassDefinition\Data\Objectbricks::__set_state(array(
+                 'name' => 'psds',
+                 'title' => 'Psds',
+                 'tooltip' => '',
+                 'mandatory' => false,
+                 'noteditable' => false,
+                 'index' => false,
+                 'locked' => false,
+                 'style' => '',
+                 'permissions' => NULL,
+                 'fieldtype' => '',
+                 'relationType' => false,
+                 'invisible' => false,
+                 'visibleGridView' => false,
+                 'visibleSearch' => false,
+                 'blockedVarsForExport' => 
+                array (
+                ),
+                 'allowedTypes' => 
+                array (
+                  0 => 'productRiskDataSheet',
+                ),
+                 'maxItems' => 1,
+                 'border' => false,
+              )),
+            ),
+             'locked' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'fieldtype' => 'panel',
+             'layout' => NULL,
+             'border' => false,
+             'icon' => '',
+             'labelWidth' => 100,
+             'labelAlign' => 'left',
+          )),
+          3 => 
           Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'Product Information',
              'type' => NULL,
@@ -659,7 +825,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          3 => 
+          4 => 
           Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'Downloads',
              'type' => NULL,
@@ -674,7 +840,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'children' => 
             array (
               0 => 
-              Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections::__set_state(array(
+              Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation::__set_state(array(
                  'name' => 'downloads',
                  'title' => 'Downloads',
                  'tooltip' => '',
@@ -685,24 +851,46 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
                  'style' => '',
                  'permissions' => NULL,
                  'fieldtype' => '',
-                 'relationType' => false,
+                 'relationType' => true,
                  'invisible' => false,
                  'visibleGridView' => false,
                  'visibleSearch' => false,
                  'blockedVarsForExport' => 
                 array (
                 ),
-                 'allowedTypes' => 
+                 'classes' => 
                 array (
-                  0 => 'documentLink',
+                  0 => 
+                  array (
+                    'classes' => '',
+                  ),
                 ),
-                 'lazyLoading' => true,
+                 'displayMode' => NULL,
+                 'pathFormatterClass' => '',
                  'maxItems' => NULL,
-                 'disallowAddRemove' => false,
-                 'disallowReorder' => false,
-                 'collapsed' => false,
-                 'collapsible' => false,
-                 'border' => false,
+                 'assetInlineDownloadAllowed' => false,
+                 'assetUploadPath' => '',
+                 'allowToClearRelation' => true,
+                 'objectsAllowed' => false,
+                 'assetsAllowed' => false,
+                 'assetTypes' => 
+                array (
+                  0 => 
+                  array (
+                    'assetTypes' => '',
+                  ),
+                ),
+                 'documentsAllowed' => true,
+                 'documentTypes' => 
+                array (
+                  0 => 
+                  array (
+                    'documentTypes' => '',
+                  ),
+                ),
+                 'enableTextSelection' => false,
+                 'width' => '',
+                 'height' => '',
               )),
             ),
              'locked' => false,
@@ -716,7 +904,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'labelWidth' => 100,
              'labelAlign' => 'left',
           )),
-          4 => 
+          5 => 
           Pimcore\Model\DataObject\ClassDefinition\Layout\Panel::__set_state(array(
              'name' => 'Warranty Statement',
              'type' => NULL,
