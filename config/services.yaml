@@ -1,5 +1,5 @@
 parameters:
-    secret: AN+CVsl+P3w2wJdIOGMDpcI8Z6XLlc2vAWExlcloDIE=
+    secret: Gn5a8rg7waA7Rp2C/U315vpWPd9DbzgdO+qQaCe7/zg=
 
     # customize the full path to external executables
     # normally they are auto-detected by `which program` or auto-discovered in the configured path in
@@ -45,10 +45,9 @@ services:
 
     # auto-register all controllers as services
     App\Controller\:
-        resource: '../src/Controller'
+        resource: "../src/Controller"
         public: true
-        tags: [ 'controller.service_arguments' ]
-
+        tags: ["controller.service_arguments"]
 
     #
     # COMMANDS
@@ -56,10 +55,8 @@ services:
 
     # auto-register all commands as services
     App\Command\:
-        resource: '../src/Command/*'
-        tags: [ 'console.command' ]
-
-
+        resource: "../src/Command/*"
+        tags: ["console.command"]
 
     # Example custom templating helper
     # App\Templating\Helper\Example:
@@ -68,8 +65,3 @@ services:
     #     public: true
     #     tags:
     #         - { name: templating.helper, alias: fooBar }
-
-    # Example event listener for objects
-    # App\EventListener\TestListener:
-    #     tags:
-    #         - { name: kernel.event_listener, event: pimcore.dataobject.preUpdate, method: onObjectPreUpdate }

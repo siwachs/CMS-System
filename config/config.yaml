@@ -1,17 +1,10 @@
 imports:
-    - { resource: 'local/' }
-
+    - { resource: "local/" }
 
 pimcore:
-
-# IMPORTANT Notice!
-# Following there are only some examples listed, for a full list of possible options, please run the following command:
-# ./bin/console debug:config pimcore
-# you can also filter them by path, eg.
-# ./bin/console debug:config pimcore assets
-# or even more specific:
-# ./bin/console debug:config pimcore assets.image
-
+    bundles:
+        search_paths:
+            - src/bundles/BackendExtBundle
 
 #### TRANSLATIONS
 #    translations:
@@ -33,7 +26,6 @@ pimcore:
 #            'Pimcore\Model\Document\Link': 'App\Model\Document\Link'
 #            'Pimcore\Model\Document\Listing': 'App\Model\Document\Listing'
 
-
 #### CUSTOM DOCUMENT EDITABLES
 #    documents:
 #        allow_trailing_slash: 'yes'
@@ -42,14 +34,12 @@ pimcore:
 #            map:
 #                markdown: \App\Model\Document\Tag\Markdown
 
-
 #### CUSTOM OBJECT DATA TYPES
 #    objects:
 #        class_definitions:
 #            data:
 #                map:
 #                  myDataType: \App\Model\DataObject\Data\MyDataType
-
 
 #### ASSET CUSTOM SETTINGS
 #    assets:
@@ -63,7 +53,6 @@ pimcore:
 #                generator: imagick
 #            thumbnails:
 #                webp_auto_support: false
-
 
 #### SYSTEM SETTINGS
 
@@ -100,7 +89,6 @@ pimcore:
 
 #### SYMFONY OVERRIDES
 framework:
-
 #### DEFINE LOCATION OF MANIFEST WHEN WORKING WITH SYMFONY ENCORE
 #    assets:
 #        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'

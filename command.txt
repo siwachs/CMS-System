@@ -1,0 +1,1 @@
+php bin/console pimcore:generate:bundle --namespace=bundles --dir=src/bundles --bundle-name=BackendExtBundle

@@ -1,0 +1,5 @@
+backend_ext:
+    resource: "@BackendExtBundle/src/Controller/"
+    type:     annotation
+    prefix:   /
+

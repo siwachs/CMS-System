@@ -19,15 +19,6 @@ class DefaultController extends FrontendController
     }
 
     /**
-     * @param Request $request
-     * @return array
-     */
-    public function footerAction(Request $request)
-    {
-        return [];
-    }
-
-    /**
      * Forwards the request to admin login
      */
     public function loginAction(): Response
