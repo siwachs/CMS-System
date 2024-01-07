@@ -1,3 +1,4 @@
-.white-icon {
-    color: white !important;
+dialog {
+    width: 48rem;
+    max-width: 90vw;
 }
