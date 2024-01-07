@@ -57,11 +57,3 @@ services:
     App\Command\:
         resource: "../src/Command/*"
         tags: ["console.command"]
-
-    # Example custom templating helper
-    # App\Templating\Helper\Example:
-    #     # templating helpers need to be public as they
-    #     # are fetched from the container on demand
-    #     public: true
-    #     tags:
-    #         - { name: templating.helper, alias: fooBar }

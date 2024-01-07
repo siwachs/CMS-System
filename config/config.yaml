@@ -4,7 +4,11 @@ imports:
 pimcore:
     bundles:
         search_paths:
-            - src/bundles/BackendExtBundle
+            - bundles/BackendExtBundle
+
+pimcore_admin:
+    admin_csp_header:
+        enabled: false
 
 #### TRANSLATIONS
 #    translations:

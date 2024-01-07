@@ -1,1 +1,5 @@
-php bin/console pimcore:generate:bundle --namespace=bundles --dir=src/bundles --bundle-name=BackendExtBundle
+bin/console pimcore:generate:bundle --namespace=BackendExtBundle --no-interaction
+
+Note: Debug assets
+php bin/console cache:clear
+php bin/console assets:install

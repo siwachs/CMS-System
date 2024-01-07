@@ -15,6 +15,13 @@ class BackendExtBundle extends AbstractPimcoreBundle implements PimcoreBundleAdm
         return \dirname(__DIR__);
     }
 
+    public function getCssPaths(): array
+    {
+        return [
+            '/bundles/backendext/css/pimcore/style.css'
+        ];
+    }
+
     public function getJsPaths(): array
     {
         return [
