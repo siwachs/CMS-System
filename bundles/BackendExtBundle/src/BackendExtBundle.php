@@ -25,7 +25,8 @@ class BackendExtBundle extends AbstractPimcoreBundle implements PimcoreBundleAdm
     public function getJsPaths(): array
     {
         return [
-            '/bundles/backendext/js/pimcore/startup.js'
+            '/bundles/backendext/js/pimcore/startup.js',
+            '/bundles/backendext/js/pimcore/script.js'
         ];
     }
 }
