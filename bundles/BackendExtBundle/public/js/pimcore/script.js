@@ -89,9 +89,22 @@ pimcore.plugin.CustomMenuButton = Class.create({
         e.preventDefault();
         const form = e.target.closest("form");
         const formData = new FormData(form);
-        for (const [name, value] of formData.entries()) {
-            console.log(`${name}: ${value}`);
+        const data = {};
+        for (const [key, value] of formData.entries()) {
+            data[key] = value.trim();
         }
+        if (
+            data["brand"] == 0 ||
+            data["category"] == 0 ||
+            data["user"] == 0 ||
+            data["objectName"] === "" ||
+            data["message"] === ""
+        ) {
+            alert("Invalid Form");
+            return;
+        }
+
+        console.log("valid form");
     },
 
     createForm: function (e) {

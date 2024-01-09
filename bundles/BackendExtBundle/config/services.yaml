@@ -1,5 +1,6 @@
 parameters:
     users_query: "SELECT users.id AS userId, users.name AS userName FROM users"
+    products_storage_path: "/Products"
 
 services:
     _defaults:
