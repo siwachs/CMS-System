@@ -24,65 +24,191 @@ pimcore.plugin.CustomMenuButton = Class.create({
         };
     },
 
+    createSelectComponent: async function createSelectComponent(
+        form,
+        labelTextContent,
+        defaultSelectTextContent,
+        id,
+        name,
+        apiEndpoint
+    ) {
+        try {
+            const label = document.createElement("label");
+            label.classList.add("block", "mb-2", "text-gray-700", "font-bold");
+            label.textContent = labelTextContent;
+            label.setAttribute("for", id);
+            form.appendChild(label);
+
+            const select = document.createElement("select");
+            select.id = id;
+            select.name = name;
+            select.classList.add(
+                "block",
+                "w-full",
+                "px-4",
+                "py-2",
+                "border",
+                "rounded",
+                "bg-gray-100",
+                "focus:outline-none",
+                "focus:border-blue-500"
+            );
+
+            const response = await fetch(apiEndpoint);
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const parsedResponse = await response.json();
+            const data =
+                parsedResponse.categories ||
+                parsedResponse.brands ||
+                parsedResponse.users;
+
+            const selectDefaultOption = document.createElement("option");
+            selectDefaultOption.value = 0;
+            selectDefaultOption.textContent = defaultSelectTextContent;
+            selectDefaultOption.selected = true;
+            select.appendChild(selectDefaultOption);
+
+            data.forEach((object) => {
+                const option = document.createElement("option");
+                option.value = object.id || object.userId;
+                option.textContent =
+                    object.categoryObjName ||
+                    object.brandObjName ||
+                    object.userName;
+                select.appendChild(option);
+            });
+
+            form.appendChild(select);
+        } catch (error) {}
+    },
+
+    formSubmitHandler: async function (e) {
+        e.preventDefault();
+        const form = e.target.closest("form");
+        const formData = new FormData(form);
+        for (const [name, value] of formData.entries()) {
+            console.log(`${name}: ${value}`);
+        }
+    },
+
     createForm: function (e) {
         try {
             const form = document.createElement("form");
+            form.onsubmit = this.formSubmitHandler.bind(this);
             form.classList.add("my-2", "space-y-4");
 
-            const brandLabel = document.createElement("label");
-            brandLabel.textContent = "Select Brand:";
-            brandLabel.setAttribute("for", "brandSelect");
-            form.appendChild(brandLabel);
+            this.createSelectComponent(
+                form,
+                "Select Brand:",
+                "Select Brand",
+                "brandSelect",
+                "brand",
+                "/get-brands"
+            ).then((brandSelect) => {
+                this.createSelectComponent(
+                    form,
+                    "Select Category:",
+                    "Select Category",
+                    "categorySelect",
+                    "category",
+                    "/get-categories"
+                ).then((categorySelect) => {
+                    this.createSelectComponent(
+                        form,
+                        "Select User:",
+                        "Select user",
+                        "userSelect",
+                        "user",
+                        "/get-users"
+                    ).then((userSelect) => {
+                        const inputLabel = document.createElement("label");
+                        inputLabel.classList.add(
+                            "block",
+                            "mb-2",
+                            "text-gray-700",
+                            "font-bold"
+                        );
+                        inputLabel.textContent = "Object Name";
+                        inputLabel.setAttribute("for", "objectName");
+                        form.appendChild(inputLabel);
 
-            const brandSelect = document.createElement("select");
-            brandSelect.id = "brandSelect";
-            brandSelect.name = "brand";
-            brandSelect.classList.add(
-                "block",
-                "w-full",
-                "px-4",
-                "py-2",
-                "border",
-                "rounded",
-                "bg-gray-100",
-                "focus:outline-none",
-                "focus:border-blue-500"
-            );
+                        const input = document.createElement("input");
+                        input.setAttribute("type", "text");
+                        input.setAttribute("id", "objectName");
+                        input.setAttribute("name", "objectName");
+                        input.classList.add(
+                            "w-full",
+                            "border",
+                            "border-gray-300",
+                            "py-2",
+                            "px-3",
+                            "rounded-md",
+                            "focus:outline-none",
+                            "focus:ring-2",
+                            "focus:ring-blue-500",
+                            "focus:border-transparent"
+                        );
+                        form.appendChild(input);
 
-            const brands = ["Brand1", "Brand2", "Brand3"];
-            brands.forEach((brand) => {
-                const option = document.createElement("option");
-                option.value = brand;
-                option.textContent = brand;
-                brandSelect.appendChild(option);
+                        const textAreaLabel = document.createElement("label");
+                        textAreaLabel.classList.add(
+                            "block",
+                            "mb-2",
+                            "text-gray-700",
+                            "font-bold"
+                        );
+                        textAreaLabel.textContent = "Message";
+                        textAreaLabel.setAttribute("for", "message");
+                        form.appendChild(textAreaLabel);
+
+                        const textarea = document.createElement("textarea");
+                        textarea.setAttribute("id", "message");
+                        textarea.setAttribute("name", "message");
+                        textarea.classList.add(
+                            "w-full",
+                            "border",
+                            "border-gray-300",
+                            "py-2",
+                            "px-3",
+                            "rounded-md",
+                            "focus:outline-none",
+                            "focus:ring-2",
+                            "focus:ring-blue-500",
+                            "focus:border-transparent",
+                            "resize-none"
+                        );
+                        form.appendChild(textarea);
+
+                        const submitButton = document.createElement("button");
+                        submitButton.textContent = "Assign user";
+                        submitButton.classList.add(
+                            "bg-blue-500",
+                            "hover:bg-blue-700",
+                            "text-white",
+                            "font-bold",
+                            "py-2",
+                            "px-4",
+                            "rounded",
+                            "cursor-pointer",
+                            "mt-4"
+                        );
+                        submitButton.addEventListener(
+                            "click",
+                            this.formSubmitHandler.bind(this)
+                        );
+
+                        submitButton.type = "submit";
+                        form.appendChild(submitButton);
+                    });
+                });
             });
-            form.appendChild(brandSelect);
 
-            const categorySelect = document.createElement("select");
-            categorySelect.classList.add(
-                "block",
-                "w-full",
-                "px-4",
-                "py-2",
-                "border",
-                "rounded",
-                "bg-gray-100",
-                "focus:outline-none",
-                "focus:border-blue-500"
-            );
-
-            const categories = ["Category 1", "Category 2", "Category 3"];
-            categories.forEach((category) => {
-                const option = document.createElement("option");
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
-            });
-            form.appendChild(categorySelect);
             return form;
         } catch (error) {
             const div = document.createElement("div");
-            div.textContent = error.message;
             div.classList.add(
                 "bg-red-200",
                 "text-red-800",
@@ -92,6 +218,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 "border",
                 "border-red-500"
             );
+            div.textContent = error.message;
             return div;
         }
     },

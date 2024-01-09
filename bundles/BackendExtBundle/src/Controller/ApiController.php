@@ -7,12 +7,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
+use Pimcore\Db;
 use Pimcore\Model\DataObject\Product;
 use Pimcore\Model\DataObject\Brand;
 use Pimcore\Model\DataObject\Category;
 
 class ApiController extends AbstractController
 {
+    private $params;
+    private $connection;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+        $this->connection = Db::get();
+    }
+
     /**
      * @Route("/get-brands", name="getBrands",methods={"GET"})
      * @param Request $request
@@ -49,7 +61,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/get-categories", name="getBrands",methods={"GET"})
+     * @Route("/get-categories", name="getCategories",methods={"GET"})
      * @param Request $request
      *
      * @return JsonResponse
@@ -112,6 +124,33 @@ class ApiController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse([
                 'products' => [],
+                'success' => false,
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @Route("/get-users", name="getUsers", methods={"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getUsers(Request $request): JsonResponse
+    {
+        try {
+            $sql =  $this->params->get('users_query');
+
+            $stmt = $this->connection->executeQuery($sql);
+            $users = $stmt->fetchAllAssociative();
+
+            return new JsonResponse([
+                'users' => $users,
+                'success' => true,
+                'error' => null
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'users' => [],
                 'success' => false,
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);

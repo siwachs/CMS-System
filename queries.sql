@@ -1,1 +1,1 @@
-SELECT users.id AS 'User Id', users.name AS 'User Name', users.type AS 'User Type', users.roles AS 'User Roles' FROM users;
+SELECT users.id AS "userId", users.name AS "userName" FROM users;
