@@ -1,5 +1,7 @@
 parameters:
-    users_query: "SELECT users.id AS userId, users.name AS userName FROM users"
+    pimcore_notification_sender: 0
+    pimcore_notification_title: "A new product is assigned to you."
+    users_query: "SELECT users.id AS userId, users.name AS userName FROM users WHERE users.name <> 'system'"
     products_storage_path: "/Products"
 
 services:

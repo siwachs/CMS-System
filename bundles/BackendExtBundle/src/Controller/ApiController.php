@@ -15,16 +15,19 @@ use Pimcore\Model\DataObject\Folder;
 use Pimcore\Model\DataObject\Product;
 use Pimcore\Model\DataObject\Brand;
 use Pimcore\Model\DataObject\Category;
+use Pimcore\Model\Notification\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class ApiController extends AbstractController
 {
     private $params;
+    private $notificationService;
     private $connection;
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(ParameterBagInterface $params, NotificationService $notificationService)
     {
         $this->params = $params;
+        $this->notificationService = $notificationService;
         $this->connection = Db::get();
     }
 
@@ -172,8 +175,6 @@ class ApiController extends AbstractController
         return $product;
     }
 
-
-
     /**
      * @Route("/assign-product", name="assignProduct",methods={"POST"})
      * @param Request $request
@@ -192,6 +193,8 @@ class ApiController extends AbstractController
             $objectName = trim($content['object-name'] ?? '');
             $message = trim($content['message'] ?? '');
             $productPath = $this->params->get('products_storage_path');
+            $notificationSender = $this->params->get('pimcore_notification_sender');
+            $pimcoreNotificationTitle = $this->params->get('pimcore_notification_title');
 
             // Validate the parameters
             if (
@@ -224,6 +227,13 @@ class ApiController extends AbstractController
             $product->setCategory([$category]);
             $product->setProductUser($userId);
             $product->save();
+            $this->notificationService->sendToUser(
+                $userId,
+                $notificationSender,
+                $pimcoreNotificationTitle,
+                $message,
+                $product
+            );
 
             return new JsonResponse([
                 'success' => true,

@@ -15,7 +15,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
         currentMenu.addUserForAProductDataEntry = {
             label: t("Assign user"),
             iconCls: "fas fa-user-plus",
-            priority: 69,
+            priority: 690,
             items: customItems,
             shadow: false,
             handler: this.addUserForAProductDataEntryHandler.bind(this),
@@ -54,6 +54,12 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 "focus:border-blue-500"
             );
 
+            const selectDefaultOption = document.createElement("option");
+            selectDefaultOption.value = 0;
+            selectDefaultOption.textContent = defaultSelectTextContent;
+            selectDefaultOption.selected = true;
+            select.appendChild(selectDefaultOption);
+
             const response = await fetch(apiEndpoint);
             if (!response.ok) {
                 throw new Error("Failed to fetch data");
@@ -64,12 +70,6 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 parsedResponse.categories ||
                 parsedResponse.brands ||
                 parsedResponse.users;
-
-            const selectDefaultOption = document.createElement("option");
-            selectDefaultOption.value = 0;
-            selectDefaultOption.textContent = defaultSelectTextContent;
-            selectDefaultOption.selected = true;
-            select.appendChild(selectDefaultOption);
 
             data.forEach((object) => {
                 const option = document.createElement("option");
