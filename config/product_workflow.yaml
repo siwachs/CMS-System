@@ -1,0 +1,60 @@
+pimcore:
+    workflows:
+        product_workflow:
+            label: "Product Workflow"
+            type: "state_machine"
+            supports:
+                - 'Pimcore\Model\DataObject\Product'
+            places:
+                new_product:
+                    label: "New Product"
+                    color: "#377ea9"
+                    permissions:
+                        - objectLayout: DefaultLayout
+                in_review:
+                    label: "In Review"
+                    color: "#ffa500"
+                    permissions:
+                        - objectLayout: DefaultLayout
+                rejected:
+                    label: "Rejected Product"
+                    color: "#d9534f"
+                accepted:
+                    label: "Accepted Product"
+                    color: "#28a013"
+            transitions:
+                submit_for_review:
+                    from: new_product
+                    to: in_review
+                    guard: "is_fully_authenticated()"
+                    options:
+                        label: "Submit for Review"
+                        notes:
+                            commentEnabled: true
+                            commentRequired: true
+                reject_product:
+                    from: in_review
+                    to: rejected
+                    guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
+                    options:
+                        label: "Reject Product"
+                        notes:
+                            commentEnabled: true
+                            commentRequired: true
+                accept_product:
+                    from: in_review
+                    to: accepted
+                    guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
+                    options:
+                        label: "Accept Product"
+                        notes:
+                            commentEnabled: true
+                            commentRequired: true
+                restart_workflow:
+                    from:
+                        - rejected
+                        - accepted
+                    to: new_product
+                    guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
+                    options:
+                        label: "Restart Workflow"

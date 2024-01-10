@@ -41,7 +41,6 @@ class ApiController extends AbstractController
     {
         try {
             $entries = new Brand\Listing();
-            $entries->setUnpublished(true);
             $brands = [];
 
             foreach ($entries as $brand) {
@@ -76,7 +75,6 @@ class ApiController extends AbstractController
     {
         try {
             $entries = new Category\Listing();
-            $entries->setUnpublished(true);
             $categories = [];
 
             foreach ($entries as $category) {
@@ -213,15 +211,11 @@ class ApiController extends AbstractController
             $brand = Brand::getById($brandId);
             $category = Category::getById($categoryId);
 
-            if ($brand === null || $category === null) {
+            if (!$brand || !$category) {
                 throw new BadRequestHttpException('Master data brand or category is invalid');
             }
 
-            $product = $this->getProduct($objectName);
-
-            if (!$product instanceof Product) {
-                $product = $this->createProduct($objectName, $productPath);
-            }
+            $product = $this->getProduct($objectName) ?? $this->createProduct($objectName, $productPath);
 
             $product->setBrand([$brand]);
             $product->setCategory([$category]);

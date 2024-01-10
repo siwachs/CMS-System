@@ -53,12 +53,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 "focus:outline-none",
                 "focus:border-blue-500"
             );
-
-            const selectDefaultOption = document.createElement("option");
-            selectDefaultOption.value = 0;
-            selectDefaultOption.textContent = defaultSelectTextContent;
-            selectDefaultOption.selected = true;
-            select.appendChild(selectDefaultOption);
+            form.appendChild(select);
 
             const response = await fetch(apiEndpoint);
             if (!response.ok) {
@@ -81,8 +76,143 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 select.appendChild(option);
             });
 
-            form.appendChild(select);
-        } catch (error) {}
+            const selectDefaultOption = document.createElement("option");
+            selectDefaultOption.value = 0;
+            selectDefaultOption.textContent = defaultSelectTextContent;
+            selectDefaultOption.selected = true;
+            select.insertBefore(selectDefaultOption, select.firstChild);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+
+    createForm: async function (e) {
+        try {
+            const form = document.createElement("form");
+            form.onsubmit = this.formSubmitHandler.bind(this);
+            form.classList.add("my-2", "space-y-4");
+
+            await this.createSelectComponent(
+                form,
+                "Select Brand:",
+                "Select Brand",
+                "brandSelect",
+                "brand",
+                "/get-brands"
+            );
+
+            await this.createSelectComponent(
+                form,
+                "Select Category:",
+                "Select Category",
+                "categorySelect",
+                "category",
+                "/get-categories"
+            );
+
+            await this.createSelectComponent(
+                form,
+                "Select User:",
+                "Select user",
+                "userSelect",
+                "user",
+                "/get-users"
+            );
+
+            const inputLabel = document.createElement("label");
+            inputLabel.classList.add(
+                "block",
+                "mb-2",
+                "text-gray-700",
+                "font-bold"
+            );
+            inputLabel.textContent = "Object Name";
+            inputLabel.setAttribute("for", "objectName");
+            form.appendChild(inputLabel);
+
+            const input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("id", "objectName");
+            input.setAttribute("name", "objectName");
+            input.classList.add(
+                "w-full",
+                "border",
+                "border-gray-300",
+                "py-2",
+                "px-3",
+                "rounded-md",
+                "focus:outline-none",
+                "focus:ring-2",
+                "focus:ring-blue-500",
+                "focus:border-transparent"
+            );
+            form.appendChild(input);
+
+            const textAreaLabel = document.createElement("label");
+            textAreaLabel.classList.add(
+                "block",
+                "mb-2",
+                "text-gray-700",
+                "font-bold"
+            );
+            textAreaLabel.textContent = "Message";
+            textAreaLabel.setAttribute("for", "message");
+            form.appendChild(textAreaLabel);
+
+            const textarea = document.createElement("textarea");
+            textarea.setAttribute("id", "message");
+            textarea.setAttribute("name", "message");
+            textarea.classList.add(
+                "w-full",
+                "border",
+                "border-gray-300",
+                "py-2",
+                "px-3",
+                "rounded-md",
+                "focus:outline-none",
+                "focus:ring-2",
+                "focus:ring-blue-500",
+                "focus:border-transparent",
+                "resize-none"
+            );
+            form.appendChild(textarea);
+
+            const submitButton = document.createElement("button");
+            submitButton.textContent = "Assign user";
+            submitButton.classList.add(
+                "bg-blue-500",
+                "hover:bg-blue-700",
+                "text-white",
+                "font-bold",
+                "py-2",
+                "px-4",
+                "rounded",
+                "cursor-pointer",
+                "mt-4"
+            );
+            submitButton.addEventListener(
+                "click",
+                this.formSubmitHandler.bind(this)
+            );
+
+            submitButton.type = "submit";
+            form.appendChild(submitButton);
+
+            return form;
+        } catch (error) {
+            const div = document.createElement("div");
+            div.classList.add(
+                "bg-red-200",
+                "text-red-800",
+                "px-4",
+                "py-2",
+                "rounded",
+                "border",
+                "border-red-500"
+            );
+            div.textContent = error.message;
+            return div;
+        }
     },
 
     formSubmitHandler: function (e) {
@@ -153,177 +283,50 @@ pimcore.plugin.CustomMenuButton = Class.create({
             });
     },
 
-    createForm: function (e) {
+    addUserForAProductDataEntryHandler: async function (e) {
         try {
-            const form = document.createElement("form");
-            form.onsubmit = this.formSubmitHandler.bind(this);
-            form.classList.add("my-2", "space-y-4");
+            const dialog = document.createElement("dialog");
+            const card = document.createElement("div");
+            const title = document.createElement("h3");
+            const closeIcon = document.createElement("i");
+            const form = await this.createForm();
 
-            this.createSelectComponent(
-                form,
-                "Select Brand:",
-                "Select Brand",
-                "brandSelect",
-                "brand",
-                "/get-brands"
-            ).then((brandSelect) => {
-                this.createSelectComponent(
-                    form,
-                    "Select Category:",
-                    "Select Category",
-                    "categorySelect",
-                    "category",
-                    "/get-categories"
-                ).then((categorySelect) => {
-                    this.createSelectComponent(
-                        form,
-                        "Select User:",
-                        "Select user",
-                        "userSelect",
-                        "user",
-                        "/get-users"
-                    ).then((userSelect) => {
-                        const inputLabel = document.createElement("label");
-                        inputLabel.classList.add(
-                            "block",
-                            "mb-2",
-                            "text-gray-700",
-                            "font-bold"
-                        );
-                        inputLabel.textContent = "Object Name";
-                        inputLabel.setAttribute("for", "objectName");
-                        form.appendChild(inputLabel);
+            card.classList.add(
+                "w-full",
+                "bg-white",
+                "shadow-md",
+                "rounded",
+                "mx-auto",
+                "p-4",
+                "relative"
+            );
 
-                        const input = document.createElement("input");
-                        input.setAttribute("type", "text");
-                        input.setAttribute("id", "objectName");
-                        input.setAttribute("name", "objectName");
-                        input.classList.add(
-                            "w-full",
-                            "border",
-                            "border-gray-300",
-                            "py-2",
-                            "px-3",
-                            "rounded-md",
-                            "focus:outline-none",
-                            "focus:ring-2",
-                            "focus:ring-blue-500",
-                            "focus:border-transparent"
-                        );
-                        form.appendChild(input);
+            title.classList.add("font-bold", "text-xl");
+            title.innerHTML = "Assign user to a product";
 
-                        const textAreaLabel = document.createElement("label");
-                        textAreaLabel.classList.add(
-                            "block",
-                            "mb-2",
-                            "text-gray-700",
-                            "font-bold"
-                        );
-                        textAreaLabel.textContent = "Message";
-                        textAreaLabel.setAttribute("for", "message");
-                        form.appendChild(textAreaLabel);
-
-                        const textarea = document.createElement("textarea");
-                        textarea.setAttribute("id", "message");
-                        textarea.setAttribute("name", "message");
-                        textarea.classList.add(
-                            "w-full",
-                            "border",
-                            "border-gray-300",
-                            "py-2",
-                            "px-3",
-                            "rounded-md",
-                            "focus:outline-none",
-                            "focus:ring-2",
-                            "focus:ring-blue-500",
-                            "focus:border-transparent",
-                            "resize-none"
-                        );
-                        form.appendChild(textarea);
-
-                        const submitButton = document.createElement("button");
-                        submitButton.textContent = "Assign user";
-                        submitButton.classList.add(
-                            "bg-blue-500",
-                            "hover:bg-blue-700",
-                            "text-white",
-                            "font-bold",
-                            "py-2",
-                            "px-4",
-                            "rounded",
-                            "cursor-pointer",
-                            "mt-4"
-                        );
-                        submitButton.addEventListener(
-                            "click",
-                            this.formSubmitHandler.bind(this)
-                        );
-
-                        submitButton.type = "submit";
-                        form.appendChild(submitButton);
-                    });
-                });
+            closeIcon.classList.add(
+                "fas",
+                "fa-times",
+                "text-black",
+                "absolute",
+                "top-4",
+                "right-4",
+                "cursor-pointer",
+                "text-xl"
+            );
+            closeIcon.addEventListener("click", function () {
+                dialog.remove();
+                dialog.innerHTML = "";
+                closeIcon.removeEventListener("click", null);
             });
 
-            return form;
-        } catch (error) {
-            const div = document.createElement("div");
-            div.classList.add(
-                "bg-red-200",
-                "text-red-800",
-                "px-4",
-                "py-2",
-                "rounded",
-                "border",
-                "border-red-500"
-            );
-            div.textContent = error.message;
-            return div;
-        }
-    },
-
-    addUserForAProductDataEntryHandler: function (e) {
-        const dialog = document.createElement("dialog");
-        const card = document.createElement("div");
-        const title = document.createElement("h3");
-        const closeIcon = document.createElement("i");
-        const form = this.createForm();
-
-        card.classList.add(
-            "w-full",
-            "bg-white",
-            "shadow-md",
-            "rounded",
-            "mx-auto",
-            "p-4",
-            "relative"
-        );
-
-        title.classList.add("font-bold", "text-xl");
-        title.innerHTML = "Assign user to a product";
-
-        closeIcon.classList.add(
-            "fas",
-            "fa-times",
-            "text-black",
-            "absolute",
-            "top-4",
-            "right-4",
-            "cursor-pointer",
-            "text-xl"
-        );
-        closeIcon.addEventListener("click", function () {
-            dialog.remove();
-            dialog.innerHTML = "";
-            closeIcon.removeEventListener("click", null);
-        });
-
-        card.appendChild(title);
-        card.appendChild(closeIcon);
-        card.append(form);
-        dialog.appendChild(card);
-        document.body.appendChild(dialog);
-        dialog.showModal();
+            card.appendChild(title);
+            card.appendChild(closeIcon);
+            card.append(form);
+            dialog.appendChild(card);
+            document.body.appendChild(dialog);
+            dialog.showModal();
+        } catch (error) {}
     },
 });
 
