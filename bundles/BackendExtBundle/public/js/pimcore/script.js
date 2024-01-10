@@ -85,9 +85,19 @@ pimcore.plugin.CustomMenuButton = Class.create({
         } catch (error) {}
     },
 
-    formSubmitHandler: async function (e) {
+    formSubmitHandler: function (e) {
         e.preventDefault();
+        const apiEndpoint = "/assign-product";
         const form = e.target.closest("form");
+        const submitButton = e.target;
+        if (submitButton.disabled) return;
+        submitButton.disabled = true;
+        submitButton.classList.add(
+            "bg-gray-400",
+            "cursor-not-allowed",
+            "opacity-50"
+        );
+
         const formData = new FormData(form);
         const data = {};
         for (const [key, value] of formData.entries()) {
@@ -100,11 +110,47 @@ pimcore.plugin.CustomMenuButton = Class.create({
             data["objectName"] === "" ||
             data["message"] === ""
         ) {
-            alert("Invalid Form");
+            submitButton.disabled = false;
+            submitButton.classList.remove(
+                "bg-gray-400",
+                "cursor-not-allowed",
+                "opacity-50"
+            );
             return;
         }
 
-        console.log("valid form");
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "brand-id": data["brand"],
+                "category-id": data["category"],
+                "user-id": data["user"],
+                "object-name": data["objectName"],
+                message: data["message"],
+            }),
+        };
+
+        fetch(apiEndpoint, options)
+            .then((response) => {
+                if (!response.ok) throw new Error("Failed to create object.");
+                return response.json();
+            })
+            .then((responseDate) => {
+                // Handle the successful response.
+            })
+            .catch((error) => {
+                alert(error.message);
+            })
+            .finally(() => {
+                submitButton.classList.remove(
+                    "bg-gray-400",
+                    "cursor-not-allowed",
+                    "opacity-50"
+                );
+            });
     },
 
     createForm: function (e) {

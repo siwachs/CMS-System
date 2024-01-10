@@ -210,6 +210,10 @@ class ApiController extends AbstractController
             $brand = Brand::getById($brandId);
             $category = Category::getById($categoryId);
 
+            if ($brand === null || $category === null) {
+                throw new BadRequestHttpException('Master data brand or category is invalid');
+            }
+
             $product = $this->getProduct($objectName);
 
             if (!$product instanceof Product) {
