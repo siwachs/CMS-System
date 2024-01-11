@@ -47,3 +47,11 @@ services:
                   event: pimcore.dataobject.preUpdate,
                   method: onPreUpdate,
               }
+
+    App\EventListener\WorkflowListener:
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: workflow.product_workflow.transition.submit_for_review,
+                  method: onSubmitForReview,
+              }

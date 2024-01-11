@@ -16,9 +16,6 @@ pimcore:
                     color: "#ffa500"
                     permissions:
                         - objectLayout: DefaultLayout
-                rejected:
-                    label: "Rejected Product"
-                    color: "#d9534f"
                 accepted:
                     label: "Accepted Product"
                     color: "#28a013"
@@ -34,7 +31,7 @@ pimcore:
                             commentRequired: true
                 reject_product:
                     from: in_review
-                    to: rejected
+                    to: new_product
                     guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
                     options:
                         label: "Reject Product"
@@ -52,7 +49,6 @@ pimcore:
                             commentRequired: true
                 restart_workflow:
                     from:
-                        - rejected
                         - accepted
                     to: new_product
                     guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"

@@ -187,6 +187,7 @@ class ApiController extends AbstractController
             // Extract parameters from the request body
             $brandId = intval($content['brand-id'] ?? 0);
             $categoryId = intval($content['category-id'] ?? 0);
+            $productOwner = intval($content['product-owner'] ?? 0);
             $userId = intval($content['user-id'] ?? 0);
             $objectName = trim($content['object-name'] ?? '');
             $message = trim($content['message'] ?? '');
@@ -198,9 +199,10 @@ class ApiController extends AbstractController
             if (
                 !is_int($brandId) || $brandId <= 0 ||
                 !is_int($categoryId) || $categoryId <= 0 ||
+                !is_int($productOwner) || $productOwner <= 0 ||
                 !is_int($userId) || $userId <= 0
             ) {
-                throw new BadRequestHttpException('Brand ID, Category ID, and User ID must be
+                throw new BadRequestHttpException('Brand ID, Category ID, User ID and Product Owner must be
                  non-zero positive integers.');
             }
 
@@ -219,6 +221,7 @@ class ApiController extends AbstractController
 
             $product->setBrand([$brand]);
             $product->setCategory([$category]);
+            $product->setUserOwner($productOwner);
             $product->setProductUser($userId);
             $product->save();
             $this->notificationService->sendToUser(

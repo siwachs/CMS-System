@@ -94,7 +94,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
 
             await this.createSelectComponent(
                 form,
-                "Select Brand:",
+                "Product Brand:",
                 "Select Brand",
                 "brandSelect",
                 "brand",
@@ -103,7 +103,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
 
             await this.createSelectComponent(
                 form,
-                "Select Category:",
+                "Product Category:",
                 "Select Category",
                 "categorySelect",
                 "category",
@@ -112,7 +112,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
 
             await this.createSelectComponent(
                 form,
-                "Select User:",
+                "Product User:",
                 "Select user",
                 "userSelect",
                 "user",
@@ -258,6 +258,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
                 "brand-id": data["brand"],
                 "category-id": data["category"],
                 "user-id": data["user"],
+                "product-owner": pimcore.globalmanager.get("user").id,
                 "object-name": data["objectName"],
                 message: data["message"],
             }),
