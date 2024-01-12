@@ -54,3 +54,6 @@ pimcore:
                     guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
                     options:
                         label: "Restart Workflow"
+                        notes:
+                            commentEnabled: true
+                            commentRequired: true

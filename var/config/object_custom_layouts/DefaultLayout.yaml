@@ -7,7 +7,7 @@ pimcore:
                     name: DefaultLayout
                     description: ''
                     creationDate: 1704900150
-                    modificationDate: 1704900156
+                    modificationDate: 1704955869
                     userOwner: 2
                     classId: Product
                     layoutDefinitions:

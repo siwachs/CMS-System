@@ -1,5 +1,8 @@
 parameters:
     secret: Gn5a8rg7waA7Rp2C/U315vpWPd9DbzgdO+qQaCe7/zg=
+    workflow_inreview_transition_message_title: "Review Product"
+    workflow_reject_product_transition_message_title: "Reject Product"
+    workflow_restart_product_transition_message_title: "Reassign Product"
 
 services:
     # default configuration for services in *this* file
@@ -54,4 +57,14 @@ services:
                   name: kernel.event_listener,
                   event: workflow.product_workflow.transition.submit_for_review,
                   method: onSubmitForReview,
+              }
+            - {
+                  name: kernel.event_listener,
+                  event: workflow.product_workflow.transition.reject_product,
+                  method: onRejectProduct,
+              }
+            - {
+                  name: kernel.event_listener,
+                  event: workflow.product_workflow.transition.restart_workflow,
+                  method: onRestartProductWorkflow,
               }
