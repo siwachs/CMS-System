@@ -65,6 +65,11 @@ services:
               }
             - {
                   name: kernel.event_listener,
+                  event: workflow.product_workflow.transition.accept_product,
+                  method: onAcceptProduct,
+              }
+            - {
+                  name: kernel.event_listener,
                   event: workflow.product_workflow.transition.restart_workflow,
                   method: onRestartProductWorkflow,
               }

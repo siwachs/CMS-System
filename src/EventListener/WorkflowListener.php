@@ -28,6 +28,16 @@ class WorkflowListener
         }
     }
 
+    private function validateOwner(Product $product)
+    {
+        $productOwner = $product->getUserOwner();
+        $currentUser = \Pimcore\Tool\Admin::getCurrentUser();
+        $userId = $currentUser->getId();
+        if ($userId !== $productOwner) {
+            throw new ValidationException("Only product owner can accept or reject product");
+        }
+    }
+
     public function onSubmitForReview(TransitionEvent $event): void
     {
         $object = $event->getSubject();
@@ -50,6 +60,7 @@ class WorkflowListener
         $object = $event->getSubject();
         if ($object instanceof Product) {
             $this->validateProduct($object);
+            $this->validateOwner($object);
             $context = $event->getContext("notes");
             $message = $context["notes"];
             $this->notificationService->sendToUser(
@@ -62,11 +73,21 @@ class WorkflowListener
         }
     }
 
+    public function onAcceptProduct(TransitionEvent $event): void
+    {
+        $object = $event->getSubject();
+        if ($object instanceof Product) {
+            $this->validateProduct($object);
+            $this->validateOwner($object);
+        }
+    }
+
     public function onRestartProductWorkflow(TransitionEvent $event): void
     {
         $object = $event->getSubject();
         if ($object instanceof Product) {
             $this->validateProduct($object);
+            $this->validateOwner($object);
             $context = $event->getContext("notes");
             $message = $context["notes"];
             $this->notificationService->sendToUser(
