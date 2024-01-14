@@ -27,6 +27,7 @@ class BackendExtBundle extends AbstractPimcoreBundle implements PimcoreBundleAdm
         return [
             '/bundles/backendext/js/pimcore/startup.js',
             '/bundles/backendext/js/pimcore/script.js',
+            '/bundles/backendext/js/pimcore/customJSComponent.js',
             '/bundles/backendext/js/pimcore/customExtComponent.js'
         ];
     }

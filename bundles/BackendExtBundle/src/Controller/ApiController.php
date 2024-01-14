@@ -233,16 +233,19 @@ class ApiController extends AbstractController
             );
 
             return new JsonResponse([
+                'message' => 'Product created.',
                 'success' => true,
                 'error' => null
             ], Response::HTTP_OK);
         } catch (BadRequestException $e) {
             return new JsonResponse([
+                'message' => 'Product creation failed.',
                 'success' => false,
                 'error' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             return new JsonResponse([
+                'message' => 'Product creation failed.',
                 'success' => false,
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);

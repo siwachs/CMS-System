@@ -9,7 +9,13 @@ pimcore:
 
 pimcore_admin:
     admin_csp_header:
-        enabled: false
+        additional_urls:
+            style-src:
+                - "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+                - "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+            font-src:
+                - "'self'"
+                - "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/"
 
 #### TRANSLATIONS
 #    translations:

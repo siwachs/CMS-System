@@ -21,6 +21,7 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
     },
 
     generateForm: function () {
+        // Fetch API data via Ext Proxy
         const brandStore = Ext.create("Ext.data.Store", {
             fields: ["id", "brandObjName"],
             proxy: {
@@ -60,6 +61,73 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
             autoLoad: true,
         });
 
+        // Form Submit Handler
+        const submitForm = function () {
+            const { brand, category, user, productName, message } =
+                form.getValues();
+            const trimmedProductName = productName.trim();
+            const trimmedMessage = message.trim();
+
+            if (
+                brand == 0 ||
+                category == 0 ||
+                user == 0 ||
+                trimmedProductName === "" ||
+                trimmedMessage === ""
+            ) {
+                Ext.Msg.alert("Validation field", "Form Data is invalid.");
+                form.getForm().reset();
+                return;
+            }
+
+            const requestData = {
+                "brand-id": brand,
+                "category-id": category,
+                "product-owner": pimcore.globalmanager.get("user").id,
+                "user-id": user,
+                "object-name": trimmedProductName,
+                message: trimmedMessage,
+            };
+
+            Ext.Ajax.request({
+                url: "/assign-product",
+                method: "POST",
+                jsonData: requestData,
+                success: function (response) {
+                    try {
+                        const decodedResponse = Ext.decode(
+                            response.responseText
+                        );
+                        Ext.Msg.alert("Success", decodedResponse.message);
+                    } catch (error) {
+                        Ext.Msg.alert(
+                            "Error",
+                            "Failed to decode server response. Please try again."
+                        );
+                    } finally {
+                        form.getForm().reset();
+                    }
+                },
+                failure: function (response) {
+                    try {
+                        const decodedResponse = Ext.decode(
+                            response.responseText
+                        );
+                        Ext.Msg.alert("Server Error!", decodedResponse.message);
+                    } catch (error) {
+                        console.error("Error decoding response:", error);
+                        Ext.Msg.alert(
+                            "Error",
+                            "Failed to decode server response. Please try again."
+                        );
+                    } finally {
+                        form.getForm().reset();
+                    }
+                },
+            });
+        };
+
+        // Ext Form UI
         const form = Ext.create("Ext.form.Panel", {
             autoWidth: true,
             fill: true,
@@ -67,6 +135,11 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
             id: "custom_ext_component_form",
             cls: "bg-gray-100 p-6 rounded-lg shadow-md",
             bodyCls: "bg-white p-6 rounded-lg shadow-md",
+            layout: {
+                type: "vbox",
+                align: "center", // Center the form vertically
+                pack: "center", // Center the form horizontally
+            },
             items: [
                 {
                     xtype: "fieldset",
@@ -84,6 +157,7 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
                                     xtype: "label",
                                     text: t("Product Brand:"),
                                     cls: "block font-bold text-base mb-2",
+                                    labelFor: "brand",
                                 },
                                 {
                                     xtype: "combobox",
@@ -98,17 +172,11 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
                                     valueField: "id",
                                     store: brandStore,
                                 },
-                            ],
-                        },
-                        {
-                            xtype: "container",
-                            layout: "vbox",
-                            cls: "mb-4 p-4 rounded-lg shadow-md",
-                            items: [
                                 {
                                     xtype: "label",
                                     text: t("Product Category:"),
                                     cls: "block font-bold text-base mb-2",
+                                    labelFor: "category",
                                 },
                                 {
                                     xtype: "combobox",
@@ -123,17 +191,11 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
                                     valueField: "id",
                                     store: categoryStore,
                                 },
-                            ],
-                        },
-                        {
-                            xtype: "container",
-                            layout: "vbox",
-                            cls: "mb-4 p-4 rounded-lg shadow-md",
-                            items: [
                                 {
                                     xtype: "label",
                                     text: t("Product User:"),
                                     cls: "block font-bold text-base mb-2",
+                                    labelFor: "user",
                                 },
                                 {
                                     xtype: "combobox",
@@ -148,17 +210,11 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
                                     valueField: "userId",
                                     store: userStore,
                                 },
-                            ],
-                        },
-                        {
-                            xtype: "container",
-                            layout: "vbox",
-                            cls: "mb-4 p-4 rounded-lg shadow-md",
-                            items: [
                                 {
                                     xtype: "label",
                                     text: t("Product Name"),
                                     cls: "block font-bold text-base mb-2",
+                                    labelFor: "productName",
                                 },
                                 {
                                     xtype: "textfield",
@@ -168,42 +224,25 @@ pimcore.plugin.CustomExtComponent = Class.create(pimcore.element.abstract, {
                                     required: true,
                                     cls: "w-96",
                                 },
-                            ],
-                        },
-                        {
-                            xtype: "container",
-                            layout: "vbox",
-                            cls: "mb-4 p-4 rounded-lg shadow-md",
-                            items: [
                                 {
                                     xtype: "label",
                                     text: t("Message"),
                                     cls: "block font-bold text-base mb-2",
+                                    labelFor: "message",
                                 },
                                 {
                                     xtype: "textareafield",
                                     name: "message",
                                     id: "message",
-                                    allowBlank: true,
+                                    allowBlank: false,
+                                    required: true,
                                     cls: "w-96",
                                 },
-                            ],
-                        },
-                        {
-                            xtype: "container",
-                            layout: "hbox",
-                            cls: "mb-4 p-4 rounded-lg shadow-md",
-                            items: [
                                 {
                                     xtype: "button",
                                     text: "Assign Product",
-                                    handler: function () {
-                                        const formData = form.getValues();
-                                        console.log(
-                                            "Form Data Submitted:",
-                                            formData
-                                        );
-                                    },
+                                    formBind: true,
+                                    handler: submitForm,
                                     cls: "bg-blue-500 text-white p-3 rounded-md cursor-pointer hover:bg-blue-600 w-96",
                                 },
                             ],
