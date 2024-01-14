@@ -11,7 +11,7 @@ pimcore.plugin.CustomMenuButton = Class.create({
     preMenuBuild: function (e) {
         const currentMenu = e.detail.menu;
 
-        const customItems = [];
+        const customItems = []; // For sub menu
         currentMenu.addUserForAProductDataEntry = {
             label: t("Assign user"),
             iconCls: "fas fa-user-plus",
@@ -22,6 +22,31 @@ pimcore.plugin.CustomMenuButton = Class.create({
             noSubmenus: true,
             cls: "text-white",
         };
+
+        currentMenu.addUserForAProductDataEntryExtJS = {
+            label: t("Assign user Ext button"),
+            iconCls: "fas fa-user-plus",
+            priority: 790,
+            items: customItems,
+            shadow: false,
+            handler: this.openPanel.bind(this),
+            noSubmenus: true,
+            cls: "text-white",
+        };
+    },
+
+    openPanel: function (e) {
+        if (!Ext.getCmp("custom_ext_component")) {
+            const customExtComponent = new pimcore.plugin.CustomExtComponent();
+            const tabPanel = Ext.getCmp("pimcore_panel_tabs");
+            const customExtComponentPanel = customExtComponent.getPanel();
+            tabPanel.add(customExtComponentPanel);
+            tabPanel.setActiveItem("custom_ext_component");
+        } else {
+            Ext.getCmp("pimcore_panel_tabs").setActiveItem(
+                "custom_ext_component"
+            );
+        }
     },
 
     createSelectComponent: async function createSelectComponent(
