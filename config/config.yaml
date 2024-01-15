@@ -7,6 +7,10 @@ pimcore:
         search_paths:
             - bundles/BackendExtBundle
 
+    models:
+        class_overrides:
+            'Pimcore\Model\DataObject\Product': 'App\Model\DataObject\Product'
+
 pimcore_admin:
     admin_csp_header:
         additional_urls:

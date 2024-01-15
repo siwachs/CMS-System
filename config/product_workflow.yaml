@@ -32,6 +32,7 @@ pimcore:
                 reject_product:
                     from: in_review
                     to: new_product
+                    guard: "is_fully_authenticated() and subject.isProductOwner()"
                     options:
                         label: "Reject Product"
                         notes:
@@ -40,6 +41,7 @@ pimcore:
                 accept_product:
                     from: in_review
                     to: accepted
+                    guard: "is_fully_authenticated() and subject.isProductOwner()"
                     options:
                         label: "Accept Product"
                         notes:
@@ -49,7 +51,7 @@ pimcore:
                     from:
                         - accepted
                     to: new_product
-                    guard: "is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
+                    guard: "is_fully_authenticated() and subject.isProductOwner()"
                     options:
                         label: "Restart Workflow"
                         notes:
